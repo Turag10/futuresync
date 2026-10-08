@@ -576,22 +576,76 @@ function SimulatorPage() {
 ===================================================== */
 
 function AIPage() {
-  const [recommendation, setRecommendation] = useState(
-    "Tell me what you want to improve and I will generate a suggestion."
+  const [message, setMessage] = useState("");
+  const [response, setResponse] = useState(
+    "Hello! I'm your FutureSync AI Companion. Tell me what you want to improve today."
   );
+  const [loading, setLoading] = useState(false);
 
-  const generateRecommendation = () => {
-    const suggestions = [
-      "Spend 45 minutes today practicing TypeScript interfaces and types.",
-      "Finish one small FutureSync feature before starting another one.",
-      "Complete your most important task before checking social media.",
-      "Practice React for one hour and build a small component afterward.",
-    ];
+  const generateResponse = () => {
+    if (!message.trim()) {
+      setResponse("Tell me something first. For example: \"How can I improve my productivity?\"");
+      return;
+    }
 
-    const random =
-      suggestions[Math.floor(Math.random() * suggestions.length)];
+    setLoading(true);
 
-    setRecommendation(random);
+    setTimeout(() => {
+      const text = message.toLowerCase();
+
+      let answer = "";
+
+      if (
+        text.includes("study") ||
+        text.includes("learn") ||
+        text.includes("coding") ||
+        text.includes("typescript") ||
+        text.includes("react")
+      ) {
+        answer =
+          "📚 I recommend a focused 60-minute session. Spend 40 minutes learning, 15 minutes practicing, and 5 minutes reviewing what you learned. Consistency is more important than studying for many hours.";
+      } else if (
+        text.includes("task") ||
+        text.includes("productivity") ||
+        text.includes("productive")
+      ) {
+        answer =
+          "⚡ Start with your most important task. Work on it for 25–45 minutes without distractions, then take a short break. Completing one important task is better than starting five tasks and finishing none.";
+      } else if (
+        text.includes("goal") ||
+        text.includes("future")
+      ) {
+        answer =
+          "🎯 Break your big goal into smaller weekly milestones. Your Future Score improves when you consistently complete small actions instead of relying on occasional bursts of motivation.";
+      } else if (
+        text.includes("habit") ||
+        text.includes("routine")
+      ) {
+        answer =
+          "🔥 Choose one habit and make it easy enough to repeat every day. For example, instead of 'study more', set a goal of 'study for 30 minutes every evening'. Repetition creates momentum.";
+      } else if (
+        text.includes("exercise") ||
+        text.includes("fitness") ||
+        text.includes("workout")
+      ) {
+        answer =
+          "💪 Try to make exercise part of your daily routine. Even 20–30 minutes of consistent activity can build a strong habit. Track your sessions in FutureSync so you can see your progress.";
+      } else {
+        answer =
+          "🤖 Based on your message, I'd suggest turning your idea into one small action today. Start with something you can finish within 30–60 minutes, then track the result in FutureSync.";
+      }
+
+      setResponse(answer);
+      setLoading(false);
+    }, 900);
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter") {
+      generateResponse();
+    }
   };
 
   return (
@@ -603,28 +657,101 @@ function AIPage() {
       />
 
       <section className="panel ai-feature-panel">
+
         <div className="ai-icon">
           <Sparkles size={32} />
         </div>
 
-        <h2>Your AI Recommendation</h2>
+        <h2>FutureSync AI</h2>
 
-        <p className="ai-recommendation">
-          {recommendation}
+        <p className="ai-subtitle">
+          Ask me about your goals, tasks, habits, study plan or productivity.
         </p>
 
-        <button
-          className="gradient-btn"
-          onClick={generateRecommendation}
-        >
-          <Sparkles size={17} />
-          Generate Recommendation
-        </button>
+        {/* AI RESPONSE */}
+        <div className="ai-chat-box">
+          <div className="ai-avatar">
+            <Brain size={16} />
+          </div>
+
+          <div className="ai-response">
+            {loading ? (
+              <div className="ai-thinking">
+                <span />
+                <span />
+                <span />
+                Thinking...
+              </div>
+            ) : (
+              response
+            )}
+          </div>
+        </div>
+
+        {/* USER INPUT */}
+        <div className="ai-input-area">
+
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask FutureSync AI something..."
+          />
+
+          <button
+            className="gradient-btn"
+            onClick={generateResponse}
+            disabled={loading}
+          >
+            <Sparkles size={16} />
+
+            {loading ? "Thinking..." : "Ask AI"}
+          </button>
+
+        </div>
+
+        {/* QUICK QUESTIONS */}
+        <div className="ai-quick-actions">
+
+          <button
+            onClick={() => {
+              setMessage("How can I improve my productivity?");
+            }}
+          >
+            Improve productivity
+          </button>
+
+          <button
+            onClick={() => {
+              setMessage("How should I study TypeScript?");
+            }}
+          >
+            Study plan
+          </button>
+
+          <button
+            onClick={() => {
+              setMessage("How can I build better habits?");
+            }}
+          >
+            Build habits
+          </button>
+
+          <button
+            onClick={() => {
+              setMessage("How can I reach my goals?");
+            }}
+          >
+            Reach my goals
+          </button>
+
+        </div>
+
       </section>
     </>
   );
 }
-
 /* =====================================================
    SHARED COMPONENTS
 ===================================================== */
