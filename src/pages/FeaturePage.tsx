@@ -1,4 +1,6 @@
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+
 import {
   Activity,
   BarChart3,
@@ -11,7 +13,7 @@ import {
   Trash2,
   Check,
 } from "lucide-react";
-import { useLocation } from "react-router-dom";
+
 import type { User } from "../App";
 import DashboardShell from "../components/DashboardShell";
 
@@ -463,12 +465,25 @@ function AnalyticsPage() {
         desc="See how consistently you are moving toward your future."
       />
 
-      <div className="stats-grid">
-        <StatCard title="Average Productivity" value={`${average}%`} />
-        <StatCard title="Best Day" value={`${Math.max(...values)}%`} />
-        <StatCard title="Consistency" value="82%" />
-      </div>
+    <div className="stats-grid">
+  <StatCard
+    title="Average Productivity"
+    value={`${average}%`}
+    to="/analytics"
+  />
 
+  <StatCard
+    title="Best Day"
+    value={`${Math.max(...values)}%`}
+    to="/analytics"
+  />
+
+  <StatCard
+    title="Consistency"
+    value="82%"
+    to="/analytics"
+  />
+</div>
       <section className="panel analytics-panel">
         <div className="panel-head">
           <h2>Productivity Analytics</h2>
@@ -781,16 +796,18 @@ function FeatureHeader({
 function StatCard({
   title,
   value,
+  to,
 }: {
   title: string;
   value: string;
+  to: string;
 }) {
   return (
-    <article className="stat-card blue">
+    <Link to={to} className="stat-card blue">
       <div>
         <p>{title}</p>
         <h3>{value}</h3>
       </div>
-    </article>
+    </Link>
   );
 }

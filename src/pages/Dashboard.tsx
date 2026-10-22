@@ -1,4 +1,5 @@
 import { ArrowUpRight, Brain, CheckSquare, Goal, LineChart } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../App";
 import DashboardShell from "../components/DashboardShell";
 
@@ -7,7 +8,8 @@ type Props = { user: User; onLogout: () => void };
 const points = [22, 45, 32, 43, 49, 75, 54, 75, 68, 88];
 
 export default function Dashboard({ user, onLogout }: Props) {
-  return (
+   const navigate = useNavigate();
+  return  (
     <DashboardShell user={user} onLogout={onLogout}>
       <div className="dashboard-welcome">
         <div><div className="eyebrow">WELCOME TO FUTURESYNC</div><h1>Good evening, {user.name} 👋</h1><p>Keep going. Your future is built by what you do today.</p></div>
@@ -18,15 +20,48 @@ export default function Dashboard({ user, onLogout }: Props) {
           <div className="eyebrow">YOUR GOALS. YOUR HABITS.</div>
           <h2>A <span>Smarter Future.</span></h2>
           <p>Plan your day, build better habits, and keep every important goal moving forward.</p>
-          <button className="gradient-btn">Get Started <ArrowUpRight size={16}/></button>
+          <button
+  className="gradient-btn"
+  onClick={() => {
+    document.querySelector(".stats-grid")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }}
+>
+  Get Started <ArrowUpRight size={16} />
+</button>
         </div>
       </section>
 
-      <div className="stats-grid">
-        <Stat icon={<Goal/>} title="Goals" value="04" change="↑ 1 this week" cls="blue" />
-        <Stat icon={<CheckSquare/>} title="Tasks" value="12" change="↑ 3 completed" cls="purple" />
-        <Stat icon={<LineChart/>} title="Future" value="78%" change="↑ 12% this month" cls="green" />
-      </div>
+     <div className="stats-grid">
+  <Stat
+    icon={<Goal />}
+    title="Goals"
+    value="04"
+    change="↑ 1 this week"
+    cls="blue"
+    to="/goals"
+  />
+
+  <Stat
+    icon={<CheckSquare />}
+    title="Tasks"
+    value="12"
+    change="↑ 3 completed"
+    cls="purple"
+    to="/tasks"
+  />
+
+  <Stat
+    icon={<LineChart />}
+    title="Future"
+    value="78%"
+    change="↑ 12% this month"
+    cls="green"
+    to="/analytics"
+  />
+</div>
 
       <div className="dashboard-grid">
         <section className="panel productivity">
@@ -56,6 +91,30 @@ export default function Dashboard({ user, onLogout }: Props) {
   );
 }
 
-function Stat({icon,title,value,change,cls}:{icon:React.ReactNode,title:string,value:string,change:string,cls:string}) {
-  return <article className={`stat-card ${cls}`}><div className="stat-icon">{icon}</div><div><p>{title}</p><h3>{value}</h3><span>{change}</span></div></article>;
+function Stat({
+  icon,
+  title,
+  value,
+  change,
+  cls,
+  to,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  change: string;
+  cls: string;
+  to: string;
+}) {
+  return (
+    <Link to={to} className={`stat-card ${cls}`}>
+      <div className="stat-icon">{icon}</div>
+
+      <div>
+        <p>{title}</p>
+        <h3>{value}</h3>
+        <span>{change}</span>
+      </div>
+    </Link>
+  );
 }

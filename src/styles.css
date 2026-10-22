@@ -914,3 +914,143 @@ button { cursor: pointer; }
     flex: 1 1 45%;
   }
 }
+/* =====================================================
+   HOME PAGE - CLICKABLE FEATURE CARDS
+===================================================== */
+
+.features-section {
+  position: relative;
+  z-index: 10;
+}
+
+.feature-grid {
+  position: relative;
+  z-index: 20;
+}
+
+.feature-card {
+  position: relative;
+  z-index: 30;
+
+  display: block;
+
+  cursor: pointer;
+
+  text-decoration: none;
+  color: inherit;
+
+  pointer-events: auto;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-7px);
+
+  border-color: #3ebfff;
+
+  box-shadow:
+    0 12px 35px #00000040,
+    0 0 25px #3ebfff18;
+}
+
+.feature-card:active {
+  transform: translateY(-3px);
+}
+
+
+/* Make everything inside the card ignore
+   pointer events so the Link receives the click */
+
+.feature-card {
+  min-height: 150px;
+  padding: 20px;
+  border: 1px solid #19385f;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #081528, #071222);
+  box-shadow: inset 0 1px #ffffff05;
+
+  display: block;
+  position: relative;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 1;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: #25b8ff;
+  box-shadow: 0 10px 28px #25b8ff20;
+}
+
+.feature-card {
+  outline: 2px solid red !important;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 5;
+}
+
+.hero-actions {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-actions a {
+  position: relative;
+  z-index: 20;
+}
+
+
+/* Prevent decorative hero elements from
+   blocking clicks */
+
+.hero-art,
+.hero-art-overlay,
+.hero-note {
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   SMOOTH SCROLL
+===================================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+a.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+a.stat-card:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
