@@ -84,7 +84,7 @@ export default function Dashboard({ user, onLogout }: Props) {
         <section className="panel ai-panel">
           <h2><Brain size={23}/> AI Recommendation</h2>
           <div className="recommendation"><p>Focus on your <strong>TypeScript</strong> goal...</p><p>Build a small project, practice consistently, and track your progress. You’re closer than you think! 🚀</p></div>
-          <button className="ghost-btn">View Suggestions <ArrowUpRight size={16}/></button>
+          <Link to="/ai" className="ghost-btn">View Suggestions <ArrowUpRight size={16}/></Link>
         </section>
       </div>
     </DashboardShell>
