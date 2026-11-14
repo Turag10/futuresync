@@ -13,14 +13,17 @@ export type User = {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem("futuresync_user");
-    return saved ? JSON.parse(saved) as User : null;
-  });
+  const saved = sessionStorage.getItem("futuresync_user");
+  return saved ? (JSON.parse(saved) as User) : null;
+});
 
-  useEffect(() => {
-    if (user) localStorage.setItem("futuresync_user", JSON.stringify(user));
-    else localStorage.removeItem("futuresync_user");
-  }, [user]);
+useEffect(() => {
+  if (user) {
+    sessionStorage.setItem("futuresync_user", JSON.stringify(user));
+  } else {
+    sessionStorage.removeItem("futuresync_user");
+  }
+}, [user]);
 
   const logout = () => setUser(null);
 
