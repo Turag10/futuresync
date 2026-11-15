@@ -1,89 +1,117 @@
-import { ArrowUpRight, Brain, CheckSquare, Goal, LineChart } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  ArrowUpRight,
+  BookOpen,
+  Brain,
+  CheckSquare,
+  Dumbbell,
+  Flame,
+  Goal,
+  Wallet,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import type { User } from "../App";
 import DashboardShell from "../components/DashboardShell";
+import NextActionPredictor from "../components/NextActionPredictor";
+import ProductivityChart from "../components/ProductivityChart";
 
 type Props = { user: User; onLogout: () => void };
 
-const points = [22, 45, 32, 43, 49, 75, 54, 75, 68, 88];
-
 export default function Dashboard({ user, onLogout }: Props) {
-   const navigate = useNavigate();
-  return  (
+  return (
     <DashboardShell user={user} onLogout={onLogout}>
-      <div className="dashboard-welcome">
-        <div><div className="eyebrow">WELCOME TO FUTURESYNC</div><h1>Good evening, {user.name} 👋</h1><p>Keep going. Your future is built by what you do today.</p></div>
-      </div>
 
+      {/* Hero Banner — background image restored */}
       <section className="dashboard-hero">
         <div className="dashboard-hero-copy">
-          <div className="eyebrow">YOUR GOALS. YOUR HABITS.</div>
-          <h2>A <span>Smarter Future.</span></h2>
-          <p>Plan your day, build better habits, and keep every important goal moving forward.</p>
+          <div className="eyebrow">WELCOME TO FUTURESYNC • DIGITAL TWIN OS</div>
+          <h2>Welcome back, <span>{user.name}</span> 👋</h2>
+          <p>Your AI-powered life synchronizer — tracking goals, study, fitness &amp; finances in real time.</p>
           <button
-  className="gradient-btn"
-  onClick={() => {
-    document.querySelector(".stats-grid")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }}
->
-  Get Started <ArrowUpRight size={16} />
-</button>
+            className="gradient-btn"
+            onClick={() =>
+              document.querySelector(".next-action-card")?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+          >
+            Go to Command Centre <ArrowUpRight size={16} />
+          </button>
         </div>
       </section>
 
-     <div className="stats-grid">
-  <Stat
-    icon={<Goal />}
-    title="Goals"
-    value="04"
-    change="↑ 1 this week"
-    cls="blue"
-    to="/goals"
-  />
+      {/* Autonomous Next-Action Predictor & Focus HUD */}
+      <NextActionPredictor />
 
-  <Stat
-    icon={<CheckSquare />}
-    title="Tasks"
-    value="12"
-    change="↑ 3 completed"
-    cls="purple"
-    to="/tasks"
-  />
+      {/* Digital Twin 6-Pillar Ecosystem Grid */}
+      <div className="section-subtitle-row">
+        <h3>Digital Twin Synchronization Matrix</h3>
+        <span className="live-status-pill">● All 6 Life Systems Active</span>
+      </div>
 
-  <Stat
-    icon={<LineChart />}
-    title="Future"
-    value="78%"
-    change="↑ 12% this month"
-    cls="green"
-    to="/analytics"
-  />
-</div>
+      <div className="stats-grid digital-twin-grid">
+        <Stat
+          icon={<Goal />}
+          title="Goals"
+          value="04"
+          change="↑ 1 milestone this week"
+          cls="blue"
+          to="/goals"
+        />
+
+        <Stat
+          icon={<CheckSquare />}
+          title="Tasks"
+          value="12"
+          change="↑ 3 completed today"
+          cls="purple"
+          to="/tasks"
+        />
+
+        <Stat
+          icon={<BookOpen />}
+          title="Study & Skills"
+          value="2.5h"
+          change="↑ 75% TypeScript mastery"
+          cls="blue"
+          to="/study"
+        />
+
+        <Stat
+          icon={<Dumbbell />}
+          title="Bio-Energy"
+          value="85%"
+          change="Optimal cognitive readiness"
+          cls="green"
+          to="/fitness"
+        />
+
+        <Stat
+          icon={<Wallet />}
+          title="Finances"
+          value="$14.5k"
+          change="6.8 mo emergency runway"
+          cls="purple"
+          to="/finances"
+        />
+
+        <Stat
+          icon={<Flame />}
+          title="Habits"
+          value="7 Days"
+          change="↑ 82% weekly consistency"
+          cls="green"
+          to="/habits"
+        />
+      </div>
 
       <div className="dashboard-grid">
-        <section className="panel productivity">
-          <div className="panel-head"><h2><LineChart size={22}/> Productivity</h2><select defaultValue="7"><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></div>
-          <div className="chart">
-            <div className="chart-y"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div>
-            <div className="chart-main">
-              <div className="grid-lines">{[1,2,3,4,5].map(n=><i key={n}/>)}</div>
-              <svg viewBox="0 0 700 240" preserveAspectRatio="none" className="line-chart">
-                <defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#3b82f6" stopOpacity=".38"/><stop offset="100%" stopColor="#3b82f6" stopOpacity="0"/></linearGradient></defs>
-                <path d="M0,190 C70,140 100,145 155,165 S240,110 310,125 S380,80 430,105 S500,135 555,85 S630,120 700,45 L700,240 L0,240Z" fill="url(#area)" />
-                <path d="M0,190 C70,140 100,145 155,165 S240,110 310,125 S380,80 430,105 S500,135 555,85 S630,120 700,45" fill="none" stroke="#5b8cff" strokeWidth="4" />
-                {points.map((_,i)=><circle key={i} cx={i*77.7} cy={[190,140,165,110,125,80,105,135,85,45][i]} r="5" fill="#7aa2ff" />)}
-              </svg>
-              <div className="chart-x">{["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d=><span key={d}>{d}</span>)}</div>
-            </div>
-          </div>
-        </section>
+        {/* Interactive Productivity & Future Score Chart */}
+        <ProductivityChart />
 
         <section className="panel ai-panel">
-          <h2><Brain size={23}/> AI Recommendation</h2>
-          <div className="recommendation"><p>Focus on your <strong>TypeScript</strong> goal...</p><p>Build a small project, practice consistently, and track your progress. You’re closer than you think! 🚀</p></div>
+          <h2><Brain size={23}/> AI Synergy Companion</h2>
+          <div className="recommendation">
+            <p><strong>Synergy Insight:</strong> Your high 85% bio-energy is multiplying your focus stamina.</p>
+            <p>Keep tonight's sleep schedule intact to protect tomorrow's planned 3-hour deep work block. You're building serious momentum! 🚀</p>
+          </div>
           <Link to="/ai" className="ghost-btn">View Suggestions <ArrowUpRight size={16}/></Link>
         </section>
       </div>

@@ -4,14 +4,22 @@ import { useState } from "react";
 import {
   Activity,
   BarChart3,
+  BookOpen,
   Brain,
+  Check,
   CheckSquare,
+  Clock,
+  DollarSign,
+  Dumbbell,
   Flame,
   Goal,
+  HeartPulse,
   Plus,
+  RotateCcw,
   Sparkles,
   Trash2,
-  Check,
+  Wallet,
+  Zap,
 } from "lucide-react";
 
 import type { User } from "../App";
@@ -61,6 +69,24 @@ const data: Record<
     icon: <CheckSquare />,
   },
 
+  study: {
+    title: "Study & Skills",
+    desc: "Master skills, manage spaced repetition, and accelerate learning.",
+    icon: <BookOpen />,
+  },
+
+  fitness: {
+    title: "Fitness & Bio-Energy",
+    desc: "Track physical readiness, workouts, and energy alignment.",
+    icon: <Dumbbell />,
+  },
+
+  finances: {
+    title: "Smart Finances",
+    desc: "Protect your runway, track daily cash flow, and avoid impulse waste.",
+    icon: <Wallet />,
+  },
+
   habits: {
     title: "Habits",
     desc: "Build small routines that become meaningful progress over time.",
@@ -95,6 +121,9 @@ export default function FeaturePage({ user, onLogout }: Props) {
       <div className="feature-page">
         {key === "goals" && <GoalsPage />}
         {key === "tasks" && <TasksPage />}
+        {key === "study" && <StudyPage />}
+        {key === "fitness" && <FitnessPage />}
+        {key === "finances" && <FinancesPage />}
         {key === "habits" && <HabitsPage />}
         {key === "analytics" && <AnalyticsPage />}
         {key === "simulator" && <SimulatorPage />}
@@ -354,6 +383,517 @@ function TasksPage() {
           of {tasks.length} tasks completed
         </div>
       </section>
+    </>
+  );
+}
+
+/* =====================================================
+   STUDY & SKILLS MATRIX
+===================================================== */
+
+type SkillTopic = {
+  id: number;
+  title: string;
+  category: string;
+  progress: number;
+  reviewDue: string;
+};
+
+function StudyPage() {
+  const [topics, setTopics] = useState<SkillTopic[]>([
+    {
+      id: 1,
+      title: "TypeScript Generics & Utility Types",
+      category: "Frontend",
+      progress: 75,
+      reviewDue: "Today",
+    },
+    {
+      id: 2,
+      title: "React 19 & Server Components",
+      category: "Frontend",
+      progress: 60,
+      reviewDue: "In 2 days",
+    },
+    {
+      id: 3,
+      title: "System Design: Caching & WebSockets",
+      category: "Architecture",
+      progress: 40,
+      reviewDue: "Today",
+    },
+    {
+      id: 4,
+      title: "DSA: Graph Traversal & DFS/BFS",
+      category: "Algorithms",
+      progress: 50,
+      reviewDue: "Tomorrow",
+    },
+  ]);
+
+  const [newTitle, setNewTitle] = useState("");
+  const [category, setCategory] = useState("Frontend");
+
+  const addTopic = () => {
+    if (!newTitle.trim()) return;
+    setTopics([
+      ...topics,
+      {
+        id: Date.now(),
+        title: newTitle,
+        category,
+        progress: 0,
+        reviewDue: "Today",
+      },
+    ]);
+    setNewTitle("");
+  };
+
+  const deleteTopic = (id: number) => {
+    setTopics(topics.filter((t) => t.id !== id));
+  };
+
+  const increaseTopicProgress = (id: number) => {
+    setTopics(
+      topics.map((t) =>
+        t.id === id ? { ...t, progress: Math.min(100, t.progress + 15) } : t
+      )
+    );
+  };
+
+  const avgProgress = Math.round(
+    topics.reduce((acc, t) => acc + t.progress, 0) / (topics.length || 1)
+  );
+
+  return (
+    <>
+      <FeatureHeader
+        icon={<BookOpen />}
+        title="Study & Skills Matrix"
+        desc="Master technologies, maintain spaced repetition, and accelerate learning velocity."
+      />
+
+      <div className="stats-grid">
+        <StatCard title="Active Topics" value={`${topics.length}`} to="/study" />
+        <StatCard title="Avg Skill Level" value={`${avgProgress}%`} to="/study" />
+        <StatCard
+          title="Reviews Due"
+          value={`${topics.filter((t) => t.reviewDue === "Today").length}`}
+          to="/study"
+        />
+      </div>
+
+      <div className="feature-content-grid">
+        <section className="panel large-feature">
+          <h2>Skill Trees & Topics</h2>
+
+          <div className="feature-input-row">
+            <input
+              type="text"
+              placeholder="Add skill or topic (e.g. Next.js App Router)..."
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="styled-select"
+            >
+              <option value="Frontend">Frontend</option>
+              <option value="Backend">Backend</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Algorithms">Algorithms</option>
+              <option value="AI / ML">AI / ML</option>
+            </select>
+            <button className="gradient-btn" onClick={addTopic}>
+              <Plus size={17} />
+              Add Topic
+            </button>
+          </div>
+
+          <div className="goal-list">
+            {topics.map((topic) => (
+              <div className="goal-item" key={topic.id}>
+                <div className="goal-item-top">
+                  <div>
+                    <span className="topic-badge">{topic.category}</span>
+                    <strong style={{ marginLeft: 8 }}>{topic.title}</strong>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span className="due-pill">Spaced Repetition: {topic.reviewDue}</span>
+                    <button
+                      className="icon-btn"
+                      onClick={() => deleteTopic(topic.id)}
+                    >
+                      <Trash2 size={17} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="progress-bar">
+                  <span style={{ width: `${topic.progress}%` }} />
+                </div>
+
+                <div className="progress-label">
+                  <span>{topic.progress}% Mastery</span>
+                  <button
+                    className="small-action"
+                    onClick={() => increaseTopicProgress(topic.id)}
+                  >
+                    +15% Practice Session
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel">
+          <h2>Knowledge Retention Protocol</h2>
+          <div className="insight-row">
+            <span>Cognitive Absorption</span>
+            <strong>Optimal (92%)</strong>
+          </div>
+          <div className="insight-row">
+            <span>Retention Multiplier</span>
+            <strong>1.8x Spaced Recall</strong>
+          </div>
+          <div className="insight-row">
+            <span>Mastered Topics</span>
+            <strong>{topics.filter((t) => t.progress >= 90).length}</strong>
+          </div>
+
+          <div className="synergy-box" style={{ marginTop: 20 }}>
+            <p>
+              💡 <strong>AI Study Tip:</strong> Schedule difficult coding topics
+              during your morning 9:00 AM - 12:00 PM cognitive peak for 40%
+              faster retention.
+            </p>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
+
+/* =====================================================
+   FITNESS & BIO-ENERGY ENGINE
+===================================================== */
+
+type WorkoutEntry = {
+  id: number;
+  activity: string;
+  duration: number;
+  intensity: "Light" | "Moderate" | "High";
+  time: string;
+};
+
+function FitnessPage() {
+  const [energy, setEnergy] = useState(85);
+  const [sleep, setSleep] = useState(7.5);
+  const [workouts, setWorkouts] = useState<WorkoutEntry[]>([
+    {
+      id: 1,
+      activity: "Calisthenics & Core Sprint",
+      duration: 30,
+      intensity: "Moderate",
+      time: "Today 08:00 AM",
+    },
+    {
+      id: 2,
+      activity: "5km Tempo Run",
+      duration: 26,
+      intensity: "High",
+      time: "Yesterday 06:30 PM",
+    },
+  ]);
+
+  const [newActivity, setNewActivity] = useState("");
+  const [duration, setDuration] = useState(30);
+  const [intensity, setIntensity] = useState<"Light" | "Moderate" | "High">("Moderate");
+
+  const addWorkout = () => {
+    if (!newActivity.trim()) return;
+    setWorkouts([
+      {
+        id: Date.now(),
+        activity: newActivity,
+        duration: Number(duration),
+        intensity,
+        time: "Just now",
+      },
+      ...workouts,
+    ]);
+    setNewActivity("");
+    setEnergy((prev) => Math.min(100, prev + 10));
+  };
+
+  return (
+    <>
+      <FeatureHeader
+        icon={<Dumbbell />}
+        title="Fitness & Bio-Energy Engine"
+        desc="Sync physical vitality with cognitive output. A strong body powers a sharp mind."
+      />
+
+      <div className="stats-grid">
+        <StatCard title="Bio-Energy Readiness" value={`${energy}%`} to="/fitness" />
+        <StatCard title="Restorative Sleep" value={`${sleep} hrs`} to="/fitness" />
+        <StatCard title="Total Sessions" value={`${workouts.length}`} to="/fitness" />
+      </div>
+
+      <div className="feature-content-grid">
+        <section className="panel large-feature">
+          <h2>Log Physical Activity</h2>
+
+          <div className="feature-input-row">
+            <input
+              type="text"
+              placeholder="Workout name (e.g. Upper Body Hypertrophy)..."
+              value={newActivity}
+              onChange={(e) => setNewActivity(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Minutes"
+              style={{ width: 90 }}
+              value={duration}
+              onChange={(e) => setDuration(Number(e.target.value))}
+            />
+            <select
+              value={intensity}
+              onChange={(e) =>
+                setIntensity(e.target.value as "Light" | "Moderate" | "High")
+              }
+              className="styled-select"
+            >
+              <option value="Light">Light</option>
+              <option value="Moderate">Moderate</option>
+              <option value="High">High</option>
+            </select>
+            <button className="gradient-btn" onClick={addWorkout}>
+              <Plus size={17} />
+              Log Workout
+            </button>
+          </div>
+
+          <div className="task-list">
+            {workouts.map((w) => (
+              <div className="task-item" key={w.id} style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div className="activity-icon-badge">
+                    <HeartPulse size={16} />
+                  </div>
+                  <div>
+                    <strong>{w.activity}</strong>
+                    <div style={{ fontSize: 11, color: "#9eacc3" }}>
+                      {w.duration} mins • {w.intensity} Intensity • {w.time}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  className="icon-btn"
+                  onClick={() =>
+                    setWorkouts(workouts.filter((item) => item.id !== w.id))
+                  }
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel">
+          <h2>Bio-Rhythm Controls</h2>
+          
+          <div className="simulator-control">
+            <label>
+              Daily Energy Level
+              <strong>{energy}%</strong>
+            </label>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              value={energy}
+              onChange={(e) => setEnergy(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="simulator-control">
+            <label>
+              Last Night Sleep
+              <strong>{sleep} hrs</strong>
+            </label>
+            <input
+              type="range"
+              min="4"
+              max="12"
+              step="0.5"
+              value={sleep}
+              onChange={(e) => setSleep(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="synergy-box" style={{ marginTop: 20 }}>
+            <p>
+              ⚡ <strong>Digital Twin Synergy:</strong> Your {energy}% energy level
+              unlocks high-capacity sprint tasks on your Dashboard Next-Action
+              Predictor.
+            </p>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
+
+/* =====================================================
+   SMART FINANCES & RUNWAY RADAR
+===================================================== */
+
+type ExpenseRecord = {
+  id: number;
+  title: string;
+  amount: number;
+  category: string;
+};
+
+function FinancesPage() {
+  const [savings, setSavings] = useState(14500);
+  const [monthlyBurn, setMonthlyBurn] = useState(2100);
+  const [expenses, setExpenses] = useState<ExpenseRecord[]>([
+    { id: 1, title: "Cloud APIs & Server Hosting", amount: 35, category: "Tech & Work" },
+    { id: 2, title: "High-Protein Nutrition", amount: 85, category: "Health" },
+    { id: 3, title: "Online Course Subscription", amount: 29, category: "Education" },
+  ]);
+
+  const [newExpTitle, setNewExpTitle] = useState("");
+  const [newExpAmount, setNewExpAmount] = useState("");
+  const [impulseCheck, setImpulseCheck] = useState(150);
+
+  const runwayMonths = (savings / (monthlyBurn || 1)).toFixed(1);
+  const hourlyWage = 30; // $30/hour baseline
+  const workHoursToEarn = (impulseCheck / hourlyWage).toFixed(1);
+  const goalDelayDays = Math.round(impulseCheck / 25);
+
+  const addExpense = () => {
+    if (!newExpTitle.trim() || !newExpAmount) return;
+    setExpenses([
+      {
+        id: Date.now(),
+        title: newExpTitle,
+        amount: Number(newExpAmount),
+        category: "General",
+      },
+      ...expenses,
+    ]);
+    setSavings((prev) => Math.max(0, prev - Number(newExpAmount)));
+    setNewExpTitle("");
+    setNewExpAmount("");
+  };
+
+  return (
+    <>
+      <FeatureHeader
+        icon={<Wallet />}
+        title="Smart Finances & Runway Radar"
+        desc="Turn financial stability into life freedom. Track runway and eliminate impulse spending."
+      />
+
+      <div className="stats-grid">
+        <StatCard title="Total Liquid Cushion" value={`$${savings.toLocaleString()}`} to="/finances" />
+        <StatCard title="Financial Runway" value={`${runwayMonths} Months`} to="/finances" />
+        <StatCard title="Est. Monthly Burn" value={`$${monthlyBurn}`} to="/finances" />
+      </div>
+
+      <div className="feature-content-grid">
+        <section className="panel large-feature">
+          <h2>Cash Flow & Investments</h2>
+
+          <div className="feature-input-row">
+            <input
+              type="text"
+              placeholder="Expense or purchase description..."
+              value={newExpTitle}
+              onChange={(e) => setNewExpTitle(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Amount ($)"
+              style={{ width: 110 }}
+              value={newExpAmount}
+              onChange={(e) => setNewExpAmount(e.target.value)}
+            />
+            <button className="gradient-btn" onClick={addExpense}>
+              <Plus size={17} />
+              Log Spend
+            </button>
+          </div>
+
+          <div className="task-list">
+            {expenses.map((exp) => (
+              <div className="task-item" key={exp.id} style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <strong>{exp.title}</strong>
+                  <div style={{ fontSize: 11, color: "#9eacc3" }}>{exp.category}</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ fontWeight: 700, color: "#ff6b8b" }}>-${exp.amount}</span>
+                  <button
+                    className="icon-btn"
+                    onClick={() =>
+                      setExpenses(expenses.filter((e) => e.id !== exp.id))
+                    }
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel">
+          <h2>Impulse Purchase Simulator</h2>
+          <p style={{ fontSize: 12, color: "#9eacc3", margin: "0 0 12px" }}>
+            Test a potential purchase before spending to see the true life cost.
+          </p>
+
+          <div className="simulator-control">
+            <label>
+              Potential Purchase Cost:
+              <strong>${impulseCheck}</strong>
+            </label>
+            <input
+              type="range"
+              min="10"
+              max="1500"
+              step="10"
+              value={impulseCheck}
+              onChange={(e) => setImpulseCheck(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="insight-row">
+            <span>Cost in Work Hours</span>
+            <strong style={{ color: "#facc15" }}>{workHoursToEarn} Hours</strong>
+          </div>
+          <div className="insight-row">
+            <span>Goal Horizon Delay</span>
+            <strong style={{ color: "#ff6b8b" }}>+{goalDelayDays} Days</strong>
+          </div>
+
+          <div className="synergy-box" style={{ marginTop: 20 }}>
+            <p>
+              💰 <strong>Runway Protection:</strong> Skipping impulse buys below
+              \$200 compounds your investment runway by up to 2.4 months per year.
+            </p>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

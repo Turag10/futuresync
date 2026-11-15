@@ -1,6 +1,15 @@
 import { NavLink } from "react-router-dom";
 import {
-  Activity, BarChart3, Brain, CheckSquare, Flame, Goal, Home, LineChart,
+  Activity,
+  BarChart3,
+  BookOpen,
+  Brain,
+  CheckSquare,
+  Dumbbell,
+  Flame,
+  Goal,
+  Home,
+  Wallet,
 } from "lucide-react";
 import Logo from "./Logo";
 
@@ -8,10 +17,13 @@ const items = [
   { to: "/dashboard", label: "Overview", icon: Home },
   { to: "/goals", label: "Goals", icon: Goal },
   { to: "/tasks", label: "Tasks", icon: CheckSquare },
+  { to: "/study", label: "Study", icon: BookOpen },
+  { to: "/fitness", label: "Fitness", icon: Dumbbell },
+  { to: "/finances", label: "Finances", icon: Wallet },
   { to: "/habits", label: "Habits", icon: Flame },
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/simulator", label: "Simulator", icon: Activity },
-  { to: "/ai", label: "AI", icon: Brain },
+  { to: "/ai", label: "AI Companion", icon: Brain },
 ];
 
 export default function Sidebar() {
